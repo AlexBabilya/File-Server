@@ -1,91 +1,91 @@
-# FastAPI File Upload Example
+# Приклад завантаження файлів з FastAPI
 
-This FastAPI application provides a simple endpoint to upload files. It utilizes the `fastapi` library for creating a web API and allows users to upload files via the `/file/` endpoint.
+Цей додаток FastAPI надає простий ендпоінт для завантаження файлів. Він використовує бібліотеку `fastapi` для створення веб-API та дозволяє користувачам завантажувати файли через ендпоінт `/file/`.
 
-##  Installation
+## Встановлення
 
-### Step 1: Clone this repository
+### Крок 1: Клонування цього репозиторію
 
 ```bash
 git clone https://github.com/AlexBabilya/file-server.git
-cd file-erver
+cd file-server
 ```
 
-To ensure a clean and isolated environment for your FastAPI project, it's recommended to use a virtual environment. Here are the steps to create a new virtual environment, activate it, and install packages from a `requirements.txt` file:
+Для забезпечення чистого та ізольованого середовища для вашого проекту FastAPI рекомендується використовувати віртуальне середовище. Ось кроки для створення нового віртуального середовища, його активації та встановлення пакетів з файлу `requirements.txt`:
 
-### Step 2: Create a Virtual Environment
+### Крок 2: Створення віртуального середовища
 
 ```bash
-# On Windows
+# На Windows
 python -m venv venv
 
-# On macOS and Linux
+# На macOS та Linux
 python3 -m venv venv
 ```
 
-This will create a new directory named `venv` containing the virtual environment.
+Це створить новий каталог з назвою `venv`, що містить віртуальне середовище.
 
-### Step 3: Activate the Virtual Environment
+### Крок 3: Активація віртуального середовища
 
-#### On Windows:
+#### На Windows:
 
 ```bash
 venv\Scripts\activate
 ```
 
-#### On macOS and Linux:
+#### На macOS та Linux:
 
 ```bash
 source venv/bin/activate
 ```
 
-After activation, your command prompt or terminal should now show the virtual environment name, indicating that you are working within the virtual environment.
+Після активації ваш командний рядок або термінал повинен відображати назву віртуального середовища, вказуючи, що ви працюєте в межах віртуального середовища.
 
-### Step 4: Install Dependencies from `requirements.txt`
+### Крок 4: Встановлення залежностей з `requirements.txt`
 
-Install the dependencies using `pip`:
+Встановіть залежності за допомогою `pip`:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-This will install the specified packages along with their dependencies in your virtual environment.
+Це встановить зазначені пакети разом із їхніми залежностями у віртуальне середовище.
 
-### Step 5: Deactivate the Virtual Environment
+### Крок 5: Вимкнення віртуального середовища
 
-When you're done working in your virtual environment, you can deactivate it:
+Коли ви закінчите роботу у віртуальному середовищі, ви можете його вимкнути:
 
 ```bash
 deactivate
 ```
 
-The `--reload` flag enables automatic code reloading during development.
+По завершенні цих кроків ви створите ізольоване середовище для свого проекту FastAPI, що забезпечить встановлення залежностей без втручання в глобальне середовище Python. Крім того, це полегшить управління та обмін проектом з іншими користувачами.
 
-## Usage
+## Використання
 
-### Step 1: Run the FastAPI application:
+### Крок 1: Запуск додатку FastAPI:
 
-After activating virtual environment and installing dependencies, you can run server: 
+Після активації віртуального середовища та встановлення залежностей ви можете запустити сервер:
 
 ```bash
 uvicorn main:app --reload
 ```
 
-The `--reload` flag enables automatic code reloading during development.
+Прапорець `--reload` вмикає автоматичне перезавантаження коду під час розробки.
 
-### Uploading a File
+### Завантаження файлу
 
-Send a POST request to the `/file/` endpoint with the file attached. The server will store the file in the specified `UPLOAD_DIRECTORY`.
+Надішліть POST-запит до ендпоінту `/file/` із прикріпленим файлом. Сервер збереже файл у вказаному `UPLOAD_DIRECTORY`.
 
-Example using [curl](https://curl.se/):
+Приклад за допомогою [curl](https://curl.se/):
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/file/" -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@/path/to/your/file.txt"
 ```
 
-### Response
+### Відповідь
 
-If the file upload is successful, you will receive a JSON response:
+Якщо завантаження файлу вдале, ви отримаєте JSON-відповідь:
 
 ```json
 {
@@ -93,7 +93,7 @@ If the file upload is successful, you will receive a JSON response:
 }
 ```
 
-If there is an error during the file upload process, an error message will be returned with a status code of 500.
+Якщо виникла помилка під час завантаження файлу, буде повернено повідомлення про помилку із статус-кодом 500.
 
 ```json
 {
@@ -101,12 +101,12 @@ If there is an error during the file upload process, an error message will be re
 }
 ```
 
-## Configuration
+## Налаштування
 
-You can modify the `UPLOAD_DIRECTORY` variable in the `main.py` file to change the directory where the uploaded files will be stored.
+Ви можете змінити змінну `UPLOAD_DIRECTORY` у файлі `main.py`, щоб змінити каталог, де будуть збережені завантажені файли.
 
 ```python
 UPLOAD_DIRECTORY = "./"
 ```
 
-Make sure that the specified directory exists and the application has the necessary permissions to write to it.
+Переконайтеся, що вказаний каталог існує, і додаток має необхідні права для запису в нього.
