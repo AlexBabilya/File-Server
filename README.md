@@ -2,7 +2,7 @@
 
 Цей додаток FastAPI надає простий ендпоінт для завантаження файлів. Він використовує бібліотеку `fastapi` для створення веб-API та дозволяє користувачам завантажувати файли через ендпоінт `/file/`.
 
-## Встановлення
+## Встановлення серверу
 
 ### Крок 1: Клонування цього репозиторію
 
@@ -61,46 +61,65 @@ deactivate
 
 По завершенні цих кроків ви створите ізольоване середовище для свого проекту FastAPI, що забезпечить встановлення залежностей без втручання в глобальне середовище Python. Крім того, це полегшить управління та обмін проектом з іншими користувачами.
 
-## Використання
+## Встановлення плейбуку
 
-### Крок 1: Запуск додатку FastAPI:
+### Крок 1: Створення API Key
 
-Після активації віртуального середовища та встановлення залежностей ви можете запустити сервер:
+Перейти до веб консолі, та стоврити навий API Key, у результаті отрмаємо API Key ID та API Key Secret у схожому форматі:
+```bash
+Key ID: 426af612-04ac-4c5e-93f7-3c159b1e811b
+Key Secret: gb1ufYa5Bs7LmMu2hsoSrB_0F_bsO0Ck-Z2ZJWhG5Ic
+```
+Зберегти ці значення.
+
+### Крок 2: Кодування API Key
+
+Для кодування потрібно виконати команду
 
 ```bash
-uvicorn main:app --reload
+echo -n "API Key ID:API Key Secret" | base64
 ```
 
-Прапорець `--reload` вмикає автоматичне перезавантаження коду під час розробки.
-
-### Завантаження файлу
-
-Надішліть POST-запит до ендпоінту `/file/` із прикріпленим файлом. Сервер збереже файл у вказаному `UPLOAD_DIRECTORY`.
-
-Приклад за допомогою [curl](https://curl.se/):
-
+Приклад:
 ```bash
-curl -X POST "http://127.0.0.1:8000/file/" -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@/path/to/your/file.txt"
+echo -n "426af612-04ac-4c5e-93f7-3c159b1e811b:gb1ufYa5Bs7LmMu2hsoSrB_0F_bsO0Ck-Z2ZJWhG5Ic" | base64
 ```
-
-### Відповідь
-
-Якщо завантаження файлу вдале, ви отримаєте JSON-відповідь:
-
-```json
-{
-  "message": "File uploaded successfully"
-}
+В результаті отримаєм ключ заковдований в base64:
+```bash
+NDI2YWY2MTItMDRhYy00YzVlLTkzZjctM2MxNTliMWU4MTFiOmdiMXVmWWE1QnM3TG1NdTJoc29TckJfMEZfYnNPMENrLVoyWkpXaEc1SWM=
 ```
+Зберегти ключ.
 
-Якщо виникла помилка під час завантаження файлу, буде повернено повідомлення про помилку із статус-кодом 500.
+### Крок 3: Створення зміної для аунтифікації
 
-```json
-{
-  "message": "Error: <error_message>"
-}
+Перейти в app.config інтеграції REST API Functions for SOAR та натиснути Add Secret
+```bash
+Secret Name = ENCODED_AUTH_KEY
+Secret Value = закодований ключ який ми отрмали в кроці 2
 ```
+B app.config стоврити зміну. Під [fn_rest_api] додати soar_auth = $ENCODED_AUTH_KEY.
+Збереги  конфігруацію.
+Save and Push Changes
 
+### Крок 4: Налаштування плейбуку
+
+1) Імпортувати плейбку NBU_Attachment_Export.resz
+Playbooks -> Import playbook -> NBU_Attachment_Export.resz
+
+2) Перейти до плейбуку та змінити в 1 функції айпі соару та айді організації
+  ```
+  soar_fqdn = "soar.ip"
+  org_id = soar.org_id
+  ```
+3)Зберегти зміни
+  Save
+4)Змінити в 2 функції айпі серверу
+```
+file_server_api = 'file_server.ip:5000'
+```
+Save
+5)Зберегти плейбук
+Save
 ## Налаштування
 
 Ви можете змінити змінну `UPLOAD_DIRECTORY` у файлі `main.py`, щоб змінити каталог, де будуть збережені завантажені файли.
